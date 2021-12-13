@@ -2,9 +2,6 @@
 <div>
     <Breadcrumb />
   <div class="product_details">
-            <!-- <div class="stor" v-for="(data,i) in this.Products" :key="i">
-            {{  data.url }}
-            </div> -->
             <button class="hart" @click="wishlist"> 
                  <img class="" src="@/assets/images/hart.png" alt="">
             </button>
@@ -12,33 +9,33 @@
                 <img class="" src="@/assets/images/arrow-left.png" alt="">
             </button>
             
-    <div  v-for="(item,i) in data" :key="i">
+    <div >
        <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 dis-img ">
                     <hooper group="group1" class="hooper_1 h-100" :infiniteScroll="true">
-                        <slide v-for="(it,i) in item.images" :key="i" >
+                        <slide v-for="(it,i) in images" :key="i" >
                             <img :src="it.thumb" alt="" class="w-100 h-100">
                         </slide>
                     </hooper>
 
                     <hooper group="group1" :itemsToShow="3" :centerMode="true" class="hooper_2 w-100 h-25" :infiniteScroll="true">
-                        <slide  v-for="(it,i) in item.images" :key="i" class="h-75 m-1 ">
+                        <slide  v-for="(it,i) in images" :key="i" class="h-75 m-1 ">
                             <img :src="it.thumb" alt="" class="w-100 h-100">
                         </slide>
                         <hooper-navigation slot="hooper-addons"></hooper-navigation>
-                        <hooper-pagination slot="hooper-addons"></hooper-pagination>
+                        <!-- <hooper-pagination slot="hooper-addons"></hooper-pagination> -->
                     </hooper>
 
             </div>
 
-            <div class="col-lg-6 col-md-8 col-sm-6 col-xs-6">
-                    <div class="content_product">
+            <div class="col-lg-6 col-md-8 col-sm-6 col-xs-6" >
+                    <div class="content_product" >
                         <div class="stars">
                             <div class="star_empty" >
                             <i class="far fa-star color_star_empty" v-for="n in 5" :key="n"></i>
                             </div>
                             <div class="star" >
-                                <i class="fas fa-star color_star"  v-for="n in item.starts" :key="n"></i>
+                                <i class="fas fa-star color_star"  v-for="n in data.rate" :key="n"></i>
                             </div>
                         </div>
                         <div class="reviews">
@@ -48,30 +45,30 @@
                             </a>
                         </div>
                         <div class="card-body">
-                            <p class="card-title" >{{ item.title_en }}</p>
-                            <p class="card-text" dir="rtl">{{ item.title_ar }}</p>
+                            <p class="card-title" >{{ data.translations[0].name }}</p>
+                            <p class="card-text" dir="rtl">  {{ ar }}</p>
                             <div class="info_seler">
                                 <div class="seler_name">
-                                    <span class="name"> Seller: {{ item.name_seler }}</span> | <span class="rotes"> Shop Rate: 5,7</span>
+                                    <span class="name"> Seller: {{ data.seller.name }}</span> | <span class="rotes"> Shop Rate: 5,7</span>
                                 </div>
-                                <a :href="item.link_seler" class="mr-1">
+                                <a :href="data.seller" class="mr-1">
                                     <img  src="~@/assets/images/63.png" class="img_mark" alt="...">
                                 </a>
-                                <a :href="item.link_seler" class="m-1">
+                                <a :href="data.seller" class="m-1">
                                     <img  src="~@/assets/images/25.png" class="img_mark " alt="...">
                                 </a>
                             </div>
                         </div>
                         <div class="detils_price_discoun">
                             <div class="discount">
-                                <span>{{ item.Discount }}%</span>
-                                Offers
+                                <span>30%</span>
+                                {{ data.currency }}
                             </div>
                             <div class="old_price">
-                            ${{ item.old_price }}
+                            ${{ data.original_price }}
                             </div>
                             <div class="new_price">
-                            ${{ item.new_price}}
+                            ${{ data.price}}
                                 <div class="vat_included">
                                     <a href="#"> VAT</a> included
                                 </div>
@@ -168,9 +165,11 @@ export default {
   name: 'Products',
   data() {
     return {
-      DataFromAPI: [],
+      images: [],
       data: [],
       count: 1,
+      ar: '',
+      TITLE: '',
         columns: [
                     {
                         title: 'Name',
@@ -245,17 +244,33 @@ export default {
     Breadcrumb
   },
   mounted(){
-      console.log(this.Products);
-     
+    //   this.$store.dispatch('Products/SUPER_PRODUCTS')
+    //   this.$store.dispatch('Products/getData')
   },
   created(){
+      this.images = this.Products.data.info_cart[1].images
+      this.ar = this.Products.data.info_cart[0].title_ar
+      this.PRODUCT();
+    //   this.data.push(this.Products.data.info_cart[this.$route.params.id]);
+    //   this.data.push(this.Products.__PRODUCTS[this.$route.params.id]);
 
-      this.$store.dispatch('Products/getData')
-      
-      this.data.push(this.Products.data.info_cart[this.$route.params.id-1]);
-
+      this.s('Welcome Here')
   },
   methods:{
+       async PRODUCT() {
+          const res = await this.api('get', `https://mapis.namaatests.com/api/product/${this.$route.params.id}`)
+          if(res.status === 200) {
+            this.data = res.data.data.product
+            this.data.translations.forEach(element => {
+              this.TITLE =  element.name
+              console.log(this.data.seller.name);
+            });
+              this.s(res.data.msg)
+            // this.$router.push('/')
+          }else{
+                  this.swr() 
+          }
+      },
       addToCart(){
           this.Products.countShoping++
             this.s(`Successfully Add ( ${this.count} ) To Cart`)
@@ -269,25 +284,25 @@ export default {
       },
     
   },
-     metaInfo() {
-        return {
-            title: 'Talabity - Prodduct Details',
-            meta:[
-                {
-                name: 'produazdct',
-                content: 'this is prosdsduct-details',
-                },
-                {
-                name: 'product',
-                content: 'this is prodsdsauct-details',
-                },
-                {
-                name: 'product',
-                content: 'this is produaadct-details',
-                },
-            ],
-        }
-    },
+  metaInfo() {
+    return {
+        title: `Talabity - ${this.TITLE }`,
+        meta:[
+            {
+            // name: this.data.seller.name,
+            content: this.data.shipping_days,
+            },
+            {
+            // name: this.data.seller.name,
+            content: this.data.shipping_method,
+            },
+            {
+            // name: this.data.seller.name,
+            content: this.data.web_url,
+            },
+        ],
+    }
+},
 }
 </script>
 

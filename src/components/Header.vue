@@ -936,9 +936,6 @@ export default {
          //
       }  
     },
-    beforeMount(){
-        //
-    },
      computed: {
     ...mapState(['Products']),
   },

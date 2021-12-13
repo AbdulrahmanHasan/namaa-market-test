@@ -4,6 +4,7 @@ const Products = {
   namespaced: true,
   state:{
     Product: [],
+    __PRODUCTS:[],
     countShoping: 0,
     wishlist: 0,
     data:{
@@ -273,21 +274,24 @@ const Products = {
 
           state.Product =  data
       
-        //   console.log(state);
+      },
+    All__PRODUCTS(state, __PRODUCTS) {
+
+          state.__PRODUCTS =  __PRODUCTS
       } 
     },
   actions:{
     async getData({commit}){
          try{
-        await axios.get("https://mapis.namaatests.com/api/product/18")
+              axios.get(`https://mapis.namaatests.com/api/product/18`)
             
             .then((response) => {
       
                   let data =  response.data.data.product
       
                      commit("all_Data", data);
-      
-               
+                    // location.reload();
+
                }).catch((error) => { 
                  console.log(error);    
                });
@@ -296,6 +300,24 @@ const Products = {
             console.log($r);
          }
    },
+//     async SUPER_PRODUCTS({commit}){
+//          try{
+//              axios.get(`https://mapis.namaatests.com/api/home`)
+            
+//             .then((response) => {
+      
+//                   let __PRODUCTS =  response.data.data.SUPER_PRICE_PRODUCTS
+      
+//                      commit("All__PRODUCTS", __PRODUCTS);
+                     
+//                }).catch((error) => { 
+//                  console.log(error);    
+//                });
+      
+//          }catch($r){
+//             console.log($r);
+//          }
+//    },
   }
 }
 

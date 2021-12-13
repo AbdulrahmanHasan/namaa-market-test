@@ -6,7 +6,7 @@
           <div class="row category_slider">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-2">
 
-                <hooper :itemsToShow="7" >
+                <hooper :itemsToShow="7" :infiniteScroll="true">
                     <slide class="icon">
                         <a href="#">
                         <img src="../assets/images/icon_1.png" alt="" >
@@ -106,7 +106,7 @@ export default {
        
   },
   created(){
-    console.log();
+    // console.log();
   }
 }
 </script>

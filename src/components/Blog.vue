@@ -37,7 +37,7 @@ export default {
   components: {
   },
   created(){
-    console.log(this.Blog.data.blogs);
+    // console.log(this.Blog.data.blogs);
   }
 }
 </script>

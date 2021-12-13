@@ -1,75 +1,72 @@
 <template>
-  <div class="special_offer">
+  <div class="special_offer" >
             <div class="ps-block__left">
                 <h3>{{ data.title }}</h3>
             </div>
 
-    <div class="row h-75">
+       <div class="row h-75" >
           <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6 mb-2">
-                 <hooper :itemsToShow="4" class="h-100 w-100">
-              <!-- <carousel :autoplay="false" :nav="false" :loop="true"> -->
-                    <slide v-for="(cart,i) in data.info_cart" :key="i">
-                      <div  class="card">
-                            <div class="discount">
-                              <span>{{ cart.Discount }}%</span>
-                              Offers
+                 <hooper :itemsToShow="4" class="h-100 w-100" :infiniteScroll="true">
+                    <slide  v-for="(item,i) in PRODUCTS" :key="i" class="h-100">
+                      <div  class="card h-100">
+                            <div class="discount" >
+                              <span>30%</span>
+                              {{ item.currency  }}
                             </div>
-                            <button class="p-2" @click.prevent="goDetils(cart.link)">
-                              <img  :src="cart.img_Product" class="card-img-top img_product" alt="...">
+                            <button class="p-2 h-100" @click.prevent="goDetils(item.id)">
+                              <img  :src="item.image" class="card-img-top img_product " alt="...">
                             </button>
                             <div class="stars">
                               <div class="star" >
-                                  <i class="fas fa-star color_star"  v-for="n in cart.starts" :key="n"></i>
+                                  <i class="fas fa-star color_star"  v-for="n in item.rate" :key="n"></i>
                               </div>
                               <div class="star_empty" >
                                 <i class="far fa-star color_star_empty" v-for="n in 5" :key="n"></i>
                               </div>
                             </div>
                           <div class="card-body">
-                            <p class="card-title" >{{ cart.title_en }}</p>
-                            <p class="card-text" dir="rtl">{{ cart.title_ar }}</p>
-                            <div class="info_seler">
-                                <a :href="cart.link_seler" class="p-2">
-                                  <img  :src="cart.img_seler" class="img_seler" alt="...">
-                                </a>
-                              <div class="title_seler">
-                                {{ cart.name_seler}}
+                            <p class="card-title" >{{ item.translations[0].name }}</p>
+                            <p class="card-text" dir="rtl">{{Products.data.info_cart[0].title_ar}}</p>
+                              <div class="info_seler">
+                                  <a href="#" class="p-2">
+                                    <img :src="images"  class="img_seler" alt="...">
+                                  </a>
+                                <div class="title_seler" >
+                                  {{ item.title }}
+                                   </div>
+                                <div class="old_price">
+                                  ${{ item.original_price }}
+                                </div>
+                                <div class="new_price">
+                                  ${{ item.price}}
+                                </div>
                               </div>
-                              <div class="old_price">
-                                ${{ cart.old_price }}
-                              </div>
-                              <div class="new_price">
-                                ${{ cart.new_price}}
-                              </div>
-                            </div>
-                              <button class="btn product-card-add-to-cart" >Add to cart  <i class="fas fa-shopping-cart "></i></button>
+                              <button class="btn product-card-add-to-cart" @click="addToCart">Add to cart  <i class="fas fa-shopping-cart "></i></button>
                           </div>
                         </div>
-              <!-- </carousel> -->
                 </slide>
                     <hooper-navigation slot="hooper-addons"></hooper-navigation>
              </hooper>
           </div>
      </div> 
-  
   </div>
 </template>
 
 <script>
-// import carousel from 'vue-owl-carousel'
-//  import { Hooper, Slide } from 'hooper';
-  import 'hooper/dist/hooper.css';
-import {
-  Hooper,
-  Slide,
-  Navigation as HooperNavigation
-  } from 'hooper';
+import 'hooper/dist/hooper.css';
+import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper';
 import { mapState } from 'vuex'
 export default {
   name: 'SpecialOffer',
   data() {
     return {
-      data:[]
+      data:[],
+      PRODUCTS:[],
+      meta_1: '',
+      meta_2: '',
+      meta_3: '',
+      meta_4: '',
+      images:'',
     }
   },
   computed: {
@@ -81,15 +78,37 @@ export default {
   HooperNavigation
   },
   created(){
-   this.$store.dispatch('Products/getData')
-
+    this.PRODUCT();
     this.data  = this.Products.data;
-   console.log(this.Products.data.info_cart);
-    // console.log(this.offers.data.info_cart.cart_1.title_en);
+    this.images = this.Products.data.info_cart[0].img_seler
+    // console.log(this.Products.__PRODUCTS);
+    // this.PRODUCTS = this.Products.__PRODUCTS
   },
   methods:{
-    goDetils(link){
-        this.$router.push(link)
+     async PRODUCT() {
+          const res = await this.api('get', 'https://mapis.namaatests.com/api/home')
+          if(res.status === 200) {
+            this.PRODUCTS = res.data.data.SUPER_PRICE_PRODUCTS
+              this.s(res.data.msg)
+              console.log(this.PRODUCTS);
+            //   window.location = '/'
+            // this.$router.push('/')
+            this.PRODUCTS.forEach((element) => {
+              this.meta_1 = element.translations[0].name
+              this.meta_2 = element.shipping_days 
+              this.meta_3 = element.currency 
+              this.meta_4 = element.image
+            });
+          }else{
+                  this.swr() 
+          }
+      },
+        addToCart(){
+          this.Products.countShoping++
+            this.s(`Successfully Add  To Cart`)
+      },
+    goDetils(id){
+        this.$router.push(`/Product-Detils/${id}`)
     },
      
   },
@@ -98,16 +117,17 @@ export default {
             title: 'Talabity - Home',
             meta:[
                 {
-                  name: 'product_one',
-                  content: 'this is test one',
+                  content: this.meta_1,
                 },
                 {
-                  name: 'product_tow',
-                  content: 'this is test tow',
+
+                  content: this.meta_2,
                 },
                 {
-                  name: 'product_three',
-                  content: 'this is test three',
+                  content: this.meta_3,
+                },
+                {
+                  content: this.meta_4,
                 },
             ]
         }
