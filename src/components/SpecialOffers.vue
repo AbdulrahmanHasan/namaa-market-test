@@ -6,7 +6,7 @@
 
        <div class="row h-75" >
           <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6 mb-2">
-                 <hooper :itemsToShow="4" class="h-100 w-100" :infiniteScroll="true">
+                 <hooper :itemsToShow="5" class="h-100 w-100" :infiniteScroll="true">
                     <slide  v-for="(item,i) in PRODUCTS" :key="i" class="h-100">
                       <div  class="card h-100">
                             <div class="discount" >

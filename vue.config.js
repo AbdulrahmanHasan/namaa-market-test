@@ -14,7 +14,15 @@ module.exports = {
         // }),
         new PrerenderSpaPlugin({
             staticDir: path.join(__dirname, 'dist'),
-            routes: ['/', '/Product-Detils/:id'],
+            routes: [
+                 '/',
+               '/Product-Detils/106',
+               '/Product-Detils/57',
+               '/Product-Detils/52',
+               '/Product-Detils/39',
+               '/Product-Detils/62',
+               '/Product-Detils/8',
+              ],
               renderer: new Renderer({
                 timeout: 0,
                 maxConcurrentRoutes: 1,
