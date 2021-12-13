@@ -1,37 +1,33 @@
-// const Vue = require('vue');
-// const server = require('express')();
+// const path = require("path");
+// const express = require('express');
+// const { createSSRApp } = require("vue");
+// const { renderToString  } = require('@vue/server-renderer');
+// const manifest = require("../dist/ssr-manifest.json");
 
-// const template = require('fs').readFileSync('./index.template.html', 'utf-8');
 
-// const renderer = require('vue-server-renderer').createRenderer({
-//   template,
-// });
+// const server = express();
 
-// const context = {
-//     title: 'vue ssr',
-//     metas: `
-//         <meta name="keyword" content="vue,ssr">
-//         <meta name="description" content="vue srr demo">
-//     `,
-// };
+// const appPath = path.join(__dirname, "../dist", manifest["app.js"]);
+
+// const App = require(appPath).default;
 
 // server.get('*', (req, res) => {
-//   const app = new Vue({
-//     data: {
-//       url: req.url
-//     },
-//     template: `<div>The visited URL is: {{ url }}</div>`,
-//   });
+//     const app = createSSRApp(App);
+//     const appContent = renderToString(app);
 
-//   renderer
-//   .renderToString(app, context, (err, html) => {
-//     console.log(html);
-//     if (err) {
-//       res.status(500).end('Internal Server Error')
-//       return;
-//     }
+
+//   const html = `
+//     <html>
+//         <head>
+//             <title>Hello</title>
+//         </head>
+//         <body>
+//             ${ appContent }
+//         </body>
+//     </html>
+//     `;
+
 //     res.end(html);
-//   });
-// })
+// });
 
-// server.listen(8080);
+// server.listen(8081);

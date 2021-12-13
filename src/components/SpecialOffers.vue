@@ -1,13 +1,15 @@
 <template>
   <div class="special_offer">
             <div class="ps-block__left">
-                <h3>{{ offers.data.title }}</h3>
+                <h3>{{ data.title }}</h3>
             </div>
 
-    <div class="row">
+    <div class="row h-75">
           <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6 mb-2">
-              <carousel :autoplay="false" :nav="false" :loop="true">
-                      <div class="card" v-for="(cart,i) in offers.data.info_cart" :key="i">
+                 <hooper :itemsToShow="4" class="h-100 w-100">
+              <!-- <carousel :autoplay="false" :nav="false" :loop="true"> -->
+                    <slide v-for="(cart,i) in data.info_cart" :key="i">
+                      <div  class="card">
                             <div class="discount">
                               <span>{{ cart.Discount }}%</span>
                               Offers
@@ -43,7 +45,10 @@
                               <button class="btn product-card-add-to-cart" >Add to cart  <i class="fas fa-shopping-cart "></i></button>
                           </div>
                         </div>
-              </carousel>
+              <!-- </carousel> -->
+                </slide>
+                    <hooper-navigation slot="hooper-addons"></hooper-navigation>
+             </hooper>
           </div>
      </div> 
   
@@ -51,50 +56,62 @@
 </template>
 
 <script>
-import carousel from 'vue-owl-carousel'
+// import carousel from 'vue-owl-carousel'
+//  import { Hooper, Slide } from 'hooper';
+  import 'hooper/dist/hooper.css';
+import {
+  Hooper,
+  Slide,
+  Navigation as HooperNavigation
+  } from 'hooper';
 import { mapState } from 'vuex'
 export default {
   name: 'SpecialOffer',
   data() {
     return {
-      //
+      data:[]
     }
   },
   computed: {
-    ...mapState([
-      'offers'
-    ]),
+     ...mapState(['Products']),
   },
   components: {
-    carousel
+     Hooper,
+    Slide,
+  HooperNavigation
   },
   created(){
+   this.$store.dispatch('Products/getData')
+
+    this.data  = this.Products.data;
+   console.log(this.Products.data.info_cart);
     // console.log(this.offers.data.info_cart.cart_1.title_en);
   },
   methods:{
     goDetils(link){
         this.$router.push(link)
     },
-         metaInfo() {
+     
+  },
+   metaInfo() {
         return {
-            title: 'SpecialOffer',
+            title: 'Talabity - Home',
             meta:[
                 {
-                name: 'SpecialOffer',
-                content: 'this is SpecialOffer',
+                  name: 'product_one',
+                  content: 'this is test one',
                 },
                 {
-                name: 'SpecialOffer',
-                content: 'this is SpecialOffer',
+                  name: 'product_tow',
+                  content: 'this is test tow',
                 },
                 {
-                name: 'SpecialOffer',
-                content: 'this is SpecialOffer',
+                  name: 'product_three',
+                  content: 'this is test three',
                 },
             ]
         }
     },
-  }
 }
 </script>
 
@@ -103,27 +120,31 @@ button:not(:disabled), [type=button]:not(:disabled), [type=reset]:not(:disabled)
   border: transparent !important;
 }
 .special_offer{
-  margin: 70px 40px 0px;
+  margin: 70px 0px;
   position: relative;
+  width: 100% !important;
+  padding: 0 40px;
 }
-.ps-block__left{
+.special_offer .ps-block__left{
   position: absolute;
   top: -48px;
+  left: 25px ;
 }
-h3{
-  color: #393E46;
-  font-weight: 500;
-  letter-spacing: -0.27px;
-  font-family: inherit;
+.special_offer h3{
+    color: #393E46;
+    font-weight: 500;
+    letter-spacing: -0.27px;
+    font-family: inherit;  
+    font-weight: 550;
 }
 .row{
-    border: 1px solid #fd5858;
+    border: 1px solid #F05E27;
     border-radius: 5px;  
 }
 .discount{
     position: absolute;
     width: 50px;
-    background-color: #fd5858;
+    background-color: #F05E27;
     height: 56px;
     border-radius: 5px;
     left: 26px;
@@ -154,19 +175,27 @@ h3{
   color: #FFCA50;
   opacity: .5;
 }
-.card{
+.special_offer .card{
+  border: unset !important;
   border-radius: unset !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.125) !important;
 }
+
 .card-img, .card-img-top, .card-img-bottom{
   padding: 60px;
 }
 .card-body .card-title{
-  font-size: 14px;
-  text-align: left;
+  text-align: left !important;
+    font: normal normal 550 18px/24px Poppins !important;
+    color: #393E46 !important;
+    letter-spacing: -0.24px;
 }
 .card-body .card-text{
-  font-size: 14px;
   text-align: right;
+  font: normal normal normal 18px/22px Almarai;
+  letter-spacing: -0.24px;
+  color: #393E46;
+  opacity: 1;
   border-bottom: 1px solid #3333333b;
   padding-bottom: 12px;
 }
@@ -192,11 +221,12 @@ h3{
   padding-left: 8px;
 }
 .old_price{
-  display: inline-block;
-    color: #fd5858;
+    color: #F05E27;
     text-decoration: line-through;
-    font-size: 11px;
-    float: right;
+    font-size: 13px;
+    position: absolute;
+    right: 17px;
+    bottom: 128px;
 }
 .new_price{
   display: inline-block;
@@ -206,17 +236,17 @@ h3{
   right: 9px;
   font-weight: 600;
 }
-.product-card-add-to-cart{
-    border: 1px solid #fd5858;
+.product-card-add-to-cart[data-v-68c8dbb0]{
+    border: 1px solid #F05E27 !important;
     width: 100%;
     margin-top: 10px;
     font-size: 15px;
     padding: 7px;
-    color: #fd5858;
+    color: #F05E27;
     background-color: inherit;
 }
 .product-card-add-to-cart:hover{
-    background-color: #fd5858;
+    background-color: #F05E27;
     color: #FFF;
 }
 .product-card-add-to-cart .fa-shopping-cart{

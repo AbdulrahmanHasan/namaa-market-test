@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 mb-4 blog">
         <div class="ps-block_left">
-            <h3 >Our Categories</h3>
+            <h3 >Our Blogs</h3>
         </div>
           <div class="row blog_slider">
             <div class="col-md-4" v-for="(blog,i) in Blog.data.blogs" :key="i">

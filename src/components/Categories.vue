@@ -5,105 +5,105 @@
         </div>
           <div class="row category_slider">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-2">
-              <carousel :autoplay="false" :nav="false" :bullets="false">
-                  
-                  <div class="icon">
-                    <a href="#">
-                     <img src="../assets/images/icon_1.png">
-                     </a>
-                      <span>Halva,Tahini <br> Falafel</span>
-                  </div>
-                  <div class="icon">
-                      <a href="#">
-                        <img src="../assets/images/icon_2.png">
-                    </a>
-                     <span>Arabic<br> Cooking</span>
-                  </div>
-                  <div class="icon">
+
+                <hooper :itemsToShow="7" >
+                    <slide class="icon">
                         <a href="#">
-                            <img src="../assets/images/icon_3.png">
+                        <img src="../assets/images/icon_1.png" alt="" >
                         </a>
-                         <span>Arabic<br> Breakfast</span>
-                  </div>
-                  <div class="icon">
+                      <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
+                    <slide class="icon">
                         <a href="#">
+                        <img src="../assets/images/icon_2.png" alt="" >
+                        </a>
+                        <span>Arabic<br> Cooking</span>
+                    </slide>
+                    <slide class="icon">
+                        <a href="#">
+                        <img src="../assets/images/icon_2.png" alt="" >
+                        </a>
+                        <span>Arabic<br> Breakfast</span>
+                    </slide>
+                    <slide class="icon">
+                          <a href="#">
                             <img src="../assets/images/icon_4.png">
                         </a>
                          <span>Noodles</span>
-                  </div>
-                  <div class="icon">
+                    </slide>
+                    <slide class="icon">
                         <a href="#">
                             <img src="../assets/images/icon_5.png">
                         </a>
                          <span>Spices</span>
-
-                  </div>
-                  <div class="icon">
+                    </slide>
+                    <slide class="icon">
                         <a href="#">
                             <img src="../assets/images/icon_6.png">
                         </a>
                         <span>Oriental Appetizers</span>
-                  </div>
-                   <div class="icon">
-                    <a href="#">
-                     <img src="../assets/images/icon_1.png">
-                     </a>
-                      <span>Halva,Tahini <br> Falafel</span>
-                  </div>
-                  <div class="icon">
-                      <a href="#">
-                        <img src="../assets/images/icon_2.png">
-                    </a>
-                     <span>Arabic<br> Cooking</span>
-                  </div>
-                  <div class="icon">
-                        <a href="#">
-                            <img src="../assets/images/icon_3.png">
+                    </slide>
+                    <slide class="icon">
+                         <a href="#">
+                        <img src="../assets/images/icon_1.png">
                         </a>
-                         <span>Arabic<br> Breakfast</span>
-                  </div>
-                  <div class="icon">
-                        <a href="#">
-                            <img src="../assets/images/icon_4.png">
+                        <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
+                    <slide class="icon">
+                         <a href="#">
+                        <img src="../assets/images/icon_1.png">
                         </a>
-                         <span>Noodles</span>
-                  </div>
-                  <div class="icon">
-                        <a href="#">
-                            <img src="../assets/images/icon_5.png">
+                        <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
+                    <slide class="icon">
+                         <a href="#">
+                        <img src="../assets/images/icon_1.png">
                         </a>
-                         <span>Spices</span>
+                        <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
+                    <slide class="icon">
+                         <a href="#">
+                        <img src="../assets/images/icon_1.png">
+                        </a>
+                        <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
+                    <slide class="icon">
+                         <a href="#">
+                        <img src="../assets/images/icon_1.png">
+                        </a>
+                        <span>Halva,Tahini <br> Falafel</span>
+                    </slide>
 
-                  </div>
-                  <div class="icon">
-                        <a href="#">
-                            <img src="../assets/images/icon_6.png">
-                        </a>
-                        <span>Oriental Appetizers</span>
-                  </div>
-              </carousel>
+                </hooper>
+
           </div>
-     </div> 
+     </div >  
     </div>
 </template>
 
 <script>
-import carousel from 'vue-owl-carousel'
+import 'hooper/dist/hooper.css';
+import {
+  Hooper,
+  Slide,
+  } from 'hooper';
 import { mapState } from 'vuex'
 export default {
   name: 'Categories',
   data() {
     return {
-      //
+        //
     }
   },
   computed: {
     ...mapState([
-      ''
+      'offers'
     ])
   },
   components: {
-    carousel
+     Hooper,
+    Slide,
+       
   },
   created(){
     console.log();
@@ -127,7 +127,7 @@ export default {
     font-weight: 550;
 }
 .category .category_slider{
-    padding: 40px 0;
+    padding-top: 30px;
     background-color: #F8F8F8;
 }
 .category .category_slider img{
@@ -135,21 +135,10 @@ export default {
     height: 112px !important;
     display: inherit;
 }
-.category .owl-carousel.owl-drag .owl-item{
-    width: 200px !important;
-    height: 180px !important;
-}
-.category .owl-carousel.owl-drag .owl-item.active .icon:after {
-    content: '';
-    position: absolute;
-    width: 132px;
-    bottom: 0px;
-    left: 35px;
+.category .is-current {
     border-bottom: 2px #f05e27 solid;
 }
-.category .owl-carousel.owl-drag .owl-item:not(:last-of-type){
-    border-right: 1px solid #33333340;
-}
+
 .category .icon span{
     display: flow-root;
 }

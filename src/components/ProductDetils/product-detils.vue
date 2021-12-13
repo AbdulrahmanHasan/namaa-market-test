@@ -1,44 +1,34 @@
 <template>
+<div>
+    <Breadcrumb />
   <div class="product_details">
-
-    <div  v-for="(item,i) in data" :key="i">
-       <div class="row ">
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 dis-img">
-                <vueper-slides
-                        ref="vueperslides1"
-                        @slide="$refs.vueperslides2 && $refs.vueperslides2.goToSlide"
-                        :slide-ratio="1 / 4"
-                        :bullets="false"
-                        :arrows="false"
-                        >
-                    <vueper-slide
-                        v-for="(it,i) in item.images"
-                        :key="i"
-                        :image="it.thumb" 
-                        />
-                    </vueper-slides>
+            <!-- <div class="stor" v-for="(data,i) in this.Products" :key="i">
+            {{  data.url }}
+            </div> -->
+            <button class="hart" @click="wishlist"> 
+                 <img class="" src="@/assets/images/hart.png" alt="">
+            </button>
+            <button class="arrow-left" @click="outPage">
+                <img class="" src="@/assets/images/arrow-left.png" alt="">
+            </button>
             
-                <vueper-slides
-                    :bullets="false"
-                    ref="vueperslides2"
-                    :slide-ratio="1 / 8"
-                    :dragging-distance="50"
-                    @slide="$refs.vueperslides1 && $refs.vueperslides1.goToSlide"
-                    :visible-slides="3"
-                    fixed-height="10px">
-                        <vueper-slide
-                            v-for="(it,i) in item.images"
-                            :key="i"
-                            @click.native="$refs.vueperslides2 && $refs.vueperslides2.goToSlide">
-                            <template #content>
-                            <div class="vueperslide__content-wrapper">
-                                <div class="vueperslide__title">
-                                    <img :src="it.thumb" alt="">
-                                </div>
-                            </div>
-                            </template>
-                        </vueper-slide>
-                    </vueper-slides>
+    <div  v-for="(item,i) in data" :key="i">
+       <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 dis-img ">
+                    <hooper group="group1" class="hooper_1 h-100" :infiniteScroll="true">
+                        <slide v-for="(it,i) in item.images" :key="i" >
+                            <img :src="it.thumb" alt="" class="w-100 h-100">
+                        </slide>
+                    </hooper>
+
+                    <hooper group="group1" :itemsToShow="3" :centerMode="true" class="hooper_2 w-100 h-25" :infiniteScroll="true">
+                        <slide  v-for="(it,i) in item.images" :key="i" class="h-75 m-1 ">
+                            <img :src="it.thumb" alt="" class="w-100 h-100">
+                        </slide>
+                        <hooper-navigation slot="hooper-addons"></hooper-navigation>
+                        <hooper-pagination slot="hooper-addons"></hooper-pagination>
+                    </hooper>
+
             </div>
 
             <div class="col-lg-6 col-md-8 col-sm-6 col-xs-6">
@@ -94,7 +84,7 @@
                             
                                         <InputNumber  :min="1" v-model="count" controls-outside></InputNumber>
                                 
-                                    <button class="btn product-card-add-to-cart" >
+                                    <button class="btn product-card-add-to-cart" @click="addToCart">
                                         Add to cart  
                                         <!-- <img src="~@/assets/images/Icon.svg" alt="" class="fa-shopping-cart "> -->
                                         <i class="fas fa-shopping-cart "></i> 
@@ -162,16 +152,23 @@
         </div>
      </div>
   </div>
+</div>
 </template>
 
 <script>
-import { VueperSlides, VueperSlide } from 'vueperslides'
-import 'vueperslides/dist/vueperslides.css'
-import { mapState , mapActions} from 'vuex'
+import Breadcrumb from '../Breadcrumb.vue'
+import 'hooper/dist/hooper.css';
+import {
+  Hooper,
+  Slide,
+  Navigation as HooperNavigation
+  } from 'hooper';
+import { mapState } from 'vuex'
 export default {
-  name: 'SpecialOffer',
+  name: 'Products',
   data() {
     return {
+      DataFromAPI: [],
       data: [],
       count: 1,
         columns: [
@@ -239,26 +236,42 @@ export default {
     }
   },
   computed: {
-    ...mapState(['offers']),
-    ...mapActions( 'offers', ['getData']),
+    ...mapState(['Products']),
   },
   components: {
-    VueperSlides,
-     VueperSlide  
+     Hooper,
+    Slide,
+  HooperNavigation,
+    Breadcrumb
   },
   mounted(){
-      console.log(this.getData);
+      console.log(this.Products);
+     
   },
   created(){
-    //   console.log(this.setAllData());
-    //   console.log(this.allData());
-    //   console.log(this.setData());
-      this.data.push(this.offers.data.info_cart[this.$route.params.id-1]);
+
+      this.$store.dispatch('Products/getData')
+      
+      this.data.push(this.Products.data.info_cart[this.$route.params.id-1]);
+
   },
   methods:{
-       metaInfo() {
+      addToCart(){
+          this.Products.countShoping++
+            this.s(`Successfully Add ( ${this.count} ) To Cart`)
+      },
+      wishlist(){
+          this.Products.wishlist++
+            this.s('Successful Add To Wishes')
+      },
+      outPage(){
+            this.e('No Link...')
+      },
+    
+  },
+     metaInfo() {
         return {
-            title: 'prodduct-details/2',
+            title: 'Talabity - Prodduct Details',
             meta:[
                 {
                 name: 'produazdct',
@@ -275,38 +288,26 @@ export default {
             ],
         }
     },
-  }
 }
 </script>
 
 
 <style>
 /* slider */
-
-.product_details .vueperslides{
-    float: unset !important;
-    margin-left: 43px !important;
-    height: 88% !important;
+.product_details .hooper-slide {
+    border: 1px solid #5c5b5a71 !important;
+    border-radius: 8px;
 }
-.product_details .vueperslide__content-wrapper:not(.vueperslide__content-wrapper--outside-top):not(.vueperslide__content-wrapper--outside-bottom){
-    margin: 0 10px !important;
-    border-radius: 5px !important;
-    overflow: hidden !important;
-    width: 100px !important;
+.product_details .hooper_1{
+   height: 75% !important;
+   display: flex;
+   justify-content: center;
 }
-.product_details .vueperslides2 .vueperslides--fixed-height.vueperslides--bullets-outside{
-    height: 10% !important;
+.product_details .hooper_2{
+   margin: 20px 0px !important;
 }
-.product_details .vueperslides--fixed-height.vueperslides--bullets-outside{
-    margin-bottom: 4em !important;
-    height: 10% !important;
-    width: 86% !important;
-}
-.product_details .vueperslides .vueperslides--ready .vueperslides--touchable .vueperslides__inner{
-    height: 76% !important;
-}
-.product_details .vueperslides__arrows{
-    position: unset !important;
+.product_details .hooper_2 .is-current{
+    border: #F05E27 1px solid !important;
 }
 /* slider */
 
@@ -402,6 +403,20 @@ export default {
   margin: 70px 40px;
   position: relative;
    font-family: 'Poppins', sans-serif;
+}
+.product_details .hart,
+.product_details .arrow-left{
+    position: absolute;
+    top: -26px;
+    width: 60px;
+    background-color: transparent !important;
+    border: unset !important;
+}
+.product_details .hart{
+    right: 20px;
+}
+.product_details .arrow-left{
+    right: 80px; 
 }
 .product_details .content_product{
     text-align: start;

@@ -72,7 +72,7 @@
                                     <a href="http://127.0.0.1:4545/my_cart" class="cart-button btn header-auth-links font-white  pl-3 pr-0">
                                         <img src="../assets/images/action-addtocart.svg" class="cart_fill mr-1" alt="cart_icon">
                                           <span class="text_order">Cart</span>
-                                        <span class="cart-count ml-2">( 0 )</span>
+                                        <span class="cart-count ml-2">( {{ this.Products.countShoping }} )</span>
                                     </a>
                                 </div>
                             </div>
@@ -927,7 +927,23 @@
     </header>
  </div>
 </template>
+<script>
+import { mapState } from 'vuex'
 
+export default {
+    data() {
+      return {
+         //
+      }  
+    },
+    beforeMount(){
+        //
+    },
+     computed: {
+    ...mapState(['Products']),
+  },
+}
+</script>
 
 <style scoped>
 .header a{

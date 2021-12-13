@@ -82,7 +82,12 @@ export default {
         ]
     }
   },
-   metaInfo() {
+    created(){
+
+    // console.log(this.offers.data.info_cart.cart_1.title_en);
+  },
+   methods:{
+     metaInfo() {
         return {
             title: 'Home',
             meta:[
@@ -101,6 +106,7 @@ export default {
             ]
         }
     },
+   },
 }
 </script>
 
