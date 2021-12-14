@@ -21,7 +21,7 @@ module.exports = {
                '/Product-Detils/52',
                '/Product-Detils/39',
                '/Product-Detils/62',
-               '/Product-Detils/8',
+              //  '/Product-Detils/8',
               ],
               renderer: new Renderer({
                 timeout: 0,
